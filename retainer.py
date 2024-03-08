@@ -1,6 +1,7 @@
 
 # simple script to backup files from source to destination location.
 
+import datetime
 import hashlib
 import pandas
 import pathlib
@@ -28,7 +29,8 @@ for file_path in tqdm.tqdm(source_files):
     file_hash = checksum(file_path)
     df.loc[len(df)] = [(file_path), (file_hash)]
 
-# save df somewhere
+manifest_path = result_dir / 'manifest' / f"{datetime.datetime.now().strftime('%y%m%d%H%M%S')}.csv"
+df.to_csv(manifest_path, index=False)
 
 print('copying files.')
 for x in tqdm.tqdm(df.to_dict('records')):
